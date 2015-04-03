@@ -24,8 +24,10 @@ class Chef
     def read_config
       if remote_config?
         fetch_remote_config
-      else
+      elsif local_config?
         read_local_config
+      else
+        config_location
       end
     end
 
@@ -59,6 +61,10 @@ class Chef
 
     def remote_config?
       !!(config_location =~ %r{^(http|https)://})
+    end
+
+    def local_config?
+      File.exist?(config_location)
     end
   end
 end
